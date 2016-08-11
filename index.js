@@ -1,7 +1,7 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-
+app.set('port', (process.env.PORT || 3000));
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
@@ -13,6 +13,6 @@ app.get('/', function(req, res){
   });
 });*/
 
-http.listen(3000, '0.0.0.0', function() {
-  console.log('listening on *:3000');
+http.listen(app.get('port'), '0.0.0.0', function() {
+  console.log('listening on *:' + app.get('port'));
 });
