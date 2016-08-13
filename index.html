@@ -25,7 +25,12 @@
 
       socket.on('playerJoinedRoom', function(msg){
         console.log('Player Joined');
-        $('#messages').append($('<li>').text(msg.playerId + " " + msg.playerName + " " + msg.playerColor));
+        $('#messages').append($('<li>').text("Adding: " + msg.playerId + " " + msg.playerName + " " + msg.playerColor));
+      });
+
+      socket.on('playerJoinedRoom', function(msg){
+        console.log('Player Joined');
+        $('#messages').append($('<li>').text("Removing " + msg.playerId + " " + msg.playerName + " " + msg.playerColor));
       });
 
       $('#playerForm').submit(function() {
