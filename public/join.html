@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Avalon</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      input.highlight { border: 1px solid red; }
+      /*form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }*/
+    </style>
+  </head>
+  <body>
+    <script src="../js/jquery-1.11.1.js"></script>
+    <script src="../js/jquery-cookie-1.4.1.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('#joinRoom').submit(function (t) {
+          var code = $('#code');
+          var nickname = $('#nickname');
+          if (code.val() == '' || nickname.val() == '') {
+            if (code.val() == '') {
+              warnInput(code);
+            }
+            if (nickname.val() == '') {
+              warnInput(nickname);
+            }
+            return false;
+          }
+          var location = window.location;
+          var path = '/room/' + code.val();
+          var user = { "nickname": nickname.val() };
+          $.cookie('user', JSON.stringify(user), { expires: 1, path: path });
+          var redirectLocation = location.protocol+'//' + location.hostname +
+              (location.port ? ':'+location.port: '') + path;
+          console.log (redirectLocation);
+          window.location.href = redirectLocation;
+          return false;
+        });
+      });
+
+      function warnInput(input) {
+        input.addClass('highlight');
+        input.change(function () {
+          input.removeClass('highlight');
+          input.change(function (){});
+        })
+      }
+
+    </script>
+    <form id="joinRoom">
+      <label>Nickname:</label>
+      <input type="text" name="nickname" id="nickname">
+      <label>Room Code:</label>
+      <input type="text" name="code" id="code">
+      <input type="submit" name="join" id="join" value="Join">
+    </form>
+  </body>
+</html>

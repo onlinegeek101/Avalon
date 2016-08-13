@@ -13,6 +13,11 @@ app.get('/host', function(req, res){
   res.sendFile(__dirname + '/host.html');
 });
 
+app.get('/room/:roomId', function(req, res){
+  console.log('Joining Room');
+  res.sendFile(__dirname + '/public/room.html');
+});
+
 app.use(express.static('public'));
 
 io.use(function(socket, next){
