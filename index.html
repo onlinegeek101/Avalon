@@ -40,11 +40,9 @@
       });
       $('#removePlayer').submit(function() {
         var emitMe = {
-            "playerId": $('#playerId').val(),
-            "playerName": $('#playerName').val(),
-            "playerColor": $('#playerColor').val(),
+            "playerId": $('#removePlayerId').val(),
         };
-        console.log('Emitting', emitMe);
+        console.log('Emitting Remove', emitMe);
         socket.emit('playerLeftRoom', emitMe);
         return false;
       });
@@ -57,7 +55,7 @@
       <input type="submit" value="Add Player" />
     </form>
     <form id="removePlayer">
-      Id: <input type="text" id="playerId"/>
+      Id: <input type="text" id="removePlayerId"/>
       <input type="submit" value="Remove Player" />
     </form>
   </body>
