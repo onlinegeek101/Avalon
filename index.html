@@ -23,14 +23,14 @@
       var roomId = path[path.length - 1];
       var socket = io(window.location.protocol + '//' + window.location.hostname + '/AAAA');
 
-      socket.on('playerJoinedRoom', function(msg){
+      socket.on('playerJoinedRoom', function(msg) {
         console.log('Player Joined');
         $('#messages').append($('<li>').text("Adding: " + msg.playerId + " " + msg.playerName + " " + msg.playerColor));
       });
 
-      socket.on('playerLeftRoom', function(msg){
+      socket.on('playerLeftRoom', function(msg) {
         console.log('Player Removed');
-        $('#messages').append($('<li>').text("Removing " + msg.playerId + " " + msg.playerName + " " + msg.playerColor));
+        $('#messages').append($('<li>').text("Removing " + msg.playerId));
       });
 
       $('#playerForm').submit(function() {
@@ -56,7 +56,7 @@
     <form id="playerForm">
       Id: <input type="text" id="playerId"/>
       Name: <input type="text" id="playerName"/>
-      Color: <input type="text" id="playerColor"/>
+      Color: <input type="color" id="playerColor" value="#ff0000" style="width:100px;">
       <input type="submit" value="Add Player" />
     </form>
     <form id="removePlayer">

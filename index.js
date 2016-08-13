@@ -18,6 +18,10 @@ ioRoom.on('connection', function(socket){
     console.log("Player Joined: ", msg);
     ioRoom.emit('playerJoinedRoom', msg);
   });
+  socket.on('playerLeftRoom', function(msg){
+    console.log("Player Left: ", msg);
+    ioRoom.emit('playerLeftRoom', msg);
+  });
 });
 
 http.listen(app.get('port'), '0.0.0.0', function() {
