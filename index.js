@@ -12,7 +12,6 @@ app.get('/', function(req, res){
 app.use(express.static('public'));
 
 io.use(function(socket, next){
-    console.log("Query: ", socket.handshake.query);
     return next();
 });
 
@@ -22,26 +21,33 @@ ioRoom.on('connection', function(socket){
   var client = {
     id: socket.id,
   };
-  console.log();
-  if (socket.handshake.query.isHost != 'true') {
-      clients.host = client;  
+  if (socket.handshake.query.isHost == 'true') {
+      clients.host = client;
+      setupHost(ioRoom, socket);
   }
+});
+
+function setupHost(room, socket) {
   socket.on('playerJoinedRoom', function(msg){
     console.log("Player Joined: ", msg);
-    var host = ioRoom.sockets[clients.host.id];
-    host.emit('playerJoinedRoom', msg);
+    var host = room.sockets[clients.host.id];
+    if (host != null) {
+      host.emit('playerJoinedRoom', msg);
+    }
   });
   socket.on('playerLeftRoom', function(msg){
     console.log("Player Left: ", msg);
-    var host = ioRoom.sockets[clients.host.id];
-    host.emit('playerLeftRoom', msg);
+    var host = room.sockets[clients.host.id];
+    if (host != null) {
+      host.emit('playerLeftRoom', msg);
+    }
   });
   socket.on('disconnect', function(socket) {
     if (clients.host != null && clients.host.id == socket.id) {
       clients.host = null;
     }
   });
-});
+}
 
 http.listen(app.get('port'), '0.0.0.0', function() {
   console.log('listening on *:' + app.get('port'));
