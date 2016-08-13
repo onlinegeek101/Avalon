@@ -11,16 +11,27 @@ app.get('/', function(req, res){
 
 app.use(express.static('public'));
 
+var clients = {};
 var ioRoom = io.of('/AAAA');
 ioRoom.on('connection', function(socket){
-  console.log("New Connection: " + socket);
+  var client = {
+    id: socket.id,
+  };
+  clients.host = clients.host == null ? client : client.host;
   socket.on('playerJoinedRoom', function(msg){
     console.log("Player Joined: ", msg);
-    ioRoom.emit('playerJoinedRoom', msg);
+    var host = ioRoom.sockets[clients.host.id];
+    host.emit('playerJoinedRoom', msg);
   });
   socket.on('playerLeftRoom', function(msg){
     console.log("Player Left: ", msg);
-    ioRoom.emit('playerLeftRoom', msg);
+    var host = ioRoom.sockets[clients.host.id];
+    host.emit('playerLeftRoom', msg);
+  });
+  socket.on('disconnect', function(socket) {
+    if (clients.host != null && clients.host.id == socket.id) {
+      clients.host = null;
+    }
   });
 });
 
