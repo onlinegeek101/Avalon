@@ -12,8 +12,8 @@
       #messages li { padding: 5px 10px; }
       #messages li:nth-child(odd) { background: #eee; }
       .nickname { font-size: 10vw; }
-      .footer { float: bottom; }
-      .content { float: center; }
+      .footer { text-align: right; padding: 10px; }
+      .content { text-align: center; }
     </style>
   </head>
   <body>
@@ -61,11 +61,11 @@
       // });
     });
     </script>
-    <div "content">
+    <div class="content">
       <label id="nickname" class="nickname"></label>
     </div>
     <div class="footer">
-      <label id="roomId"></label>
+      <label>Room Code: </label><label id="roomId"></label>
     </div>
   </body>
 </html>
