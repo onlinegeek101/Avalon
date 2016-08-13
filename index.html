@@ -21,14 +21,21 @@
     $(document).ready(function () {
       var path = window.location.pathname.trim().split('/');
       var roomId = path[path.length - 1];
-      var socket = io('/' + roomId);
+      var socket = io(window.location.protocol + '//' + window.location.hostname + '/AAAA');
+
+      socket.on('playerJoinedRoom', function(msg){
+        console.log('Player Joined');
+        $('#messages').append($('<li>').text(msg.playerId + " " + msg.playerName + " " + msg.playerColor));
+      });
+
       $('#playerForm').submit(function() {
-        socket.emit('playerJoinedRoom', {
+        var emitMe = {
             "playerId": $('#playerId').val(),
             "playerName": $('#playerName').val(),
             "playerColor": $('#playerColor').val(),
-          }
-        );
+        };
+        console.log('Emitting', emitMe);
+        socket.emit('playerJoinedRoom', emitMe);
         return false;
       });
     });

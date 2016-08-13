@@ -11,10 +11,12 @@ app.get('/', function(req, res){
 
 app.use(express.static('public'));
 
-io.on('connection', function(socket){
+var ioRoom = io.of('/AAAA');
+ioRoom.on('connection', function(socket){
   console.log("New Connection: " + socket);
   socket.on('playerJoinedRoom', function(msg){
-    io.emit('playerJoinedRoom', msg);
+    console.log("Player Joined: ", msg);
+    ioRoom.emit('playerJoinedRoom', msg);
   });
 });
 
