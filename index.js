@@ -9,6 +9,10 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/host', function(req, res){
+  res.sendFile(__dirname + '/host.html');
+});
+
 app.use(express.static('public'));
 
 io.use(function(socket, next){
@@ -23,25 +27,27 @@ ioRoom.on('connection', function(socket){
   };
   if (socket.handshake.query.isHost == 'true') {
       clients.host = client;
+      console.log('Connection Host Joined');
       setupHost(ioRoom, socket);
+  } else {
+    socket.on('playerJoinedRoom', function(msg){
+      console.log("Player Joined: ", msg);
+      var host = ioRoom.sockets[clients.host.id];
+      if (host != null) {
+        host.emit('playerJoinedRoom', msg);
+      }
+    });
+    socket.on('playerLeftRoom', function(msg){
+      console.log("Player Left: ", msg);
+      var host = ioRoom.sockets[clients.host.id];
+      if (host != null) {
+        host.emit('playerLeftRoom', msg);
+      }
+    });
   }
 });
 
 function setupHost(room, socket) {
-  socket.on('playerJoinedRoom', function(msg){
-    console.log("Player Joined: ", msg);
-    var host = room.sockets[clients.host.id];
-    if (host != null) {
-      host.emit('playerJoinedRoom', msg);
-    }
-  });
-  socket.on('playerLeftRoom', function(msg){
-    console.log("Player Left: ", msg);
-    var host = room.sockets[clients.host.id];
-    if (host != null) {
-      host.emit('playerLeftRoom', msg);
-    }
-  });
   socket.on('disconnect', function(socket) {
     if (clients.host != null && clients.host.id == socket.id) {
       clients.host = null;
