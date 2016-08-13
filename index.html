@@ -28,8 +28,8 @@
         $('#messages').append($('<li>').text("Adding: " + msg.playerId + " " + msg.playerName + " " + msg.playerColor));
       });
 
-      socket.on('playerJoinedRoom', function(msg){
-        console.log('Player Joined');
+      socket.on('playerLeftRoom', function(msg){
+        console.log('Player Removed');
         $('#messages').append($('<li>').text("Removing " + msg.playerId + " " + msg.playerName + " " + msg.playerColor));
       });
 
