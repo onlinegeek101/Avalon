@@ -38,6 +38,16 @@
         socket.emit('playerJoinedRoom', emitMe);
         return false;
       });
+      $('#removePlayer').submit(function() {
+        var emitMe = {
+            "playerId": $('#playerId').val(),
+            "playerName": $('#playerName').val(),
+            "playerColor": $('#playerColor').val(),
+        };
+        console.log('Emitting', emitMe);
+        socket.emit('playerLeftRoom', emitMe);
+        return false;
+      });
     });
     </script>
     <form id="playerForm">
@@ -45,6 +55,10 @@
       Name: <input type="text" id="playerName"/>
       Color: <input type="text" id="playerColor"/>
       <input type="submit" value="Add Player" />
+    </form>
+    <form id="removePlayer">
+      Id: <input type="text" id="playerId"/>
+      <input type="submit" value="Remove Player" />
     </form>
   </body>
 </html>
