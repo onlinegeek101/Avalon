@@ -11,13 +11,21 @@ app.get('/', function(req, res){
 
 app.use(express.static('public'));
 
+io.use(function(socket, next){
+    console.log("Query: ", socket.handshake.query);
+    return next();
+});
+
 var clients = {};
 var ioRoom = io.of('/AAAA');
 ioRoom.on('connection', function(socket){
   var client = {
     id: socket.id,
   };
-  clients.host = clients.host == null ? client : client.host;
+  console.log();
+  if (socket.handshake.query.isHost != 'true') {
+      clients.host = client;  
+  }
   socket.on('playerJoinedRoom', function(msg){
     console.log("Player Joined: ", msg);
     var host = ioRoom.sockets[clients.host.id];
