@@ -13,8 +13,8 @@ app.use(express.static('public'));
 
 io.on('connection', function(socket){
   console.log("New Connection: " + socket);
-  socket.on('new message', function(msg){
-    io.emit('new message', msg);
+  socket.on('playerJoinedRoom', function(msg){
+    io.emit('playerJoinedRoom', msg);
   });
 });
 
