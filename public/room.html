@@ -11,7 +11,9 @@
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages li { padding: 5px 10px; }
       #messages li:nth-child(odd) { background: #eee; }
-      .nickname { font-size: 40px; }
+      .nickname { font-size: 10vw; }
+      .footer { float: bottom; }
+      .content { float: center; }
     </style>
   </head>
   <body>
@@ -24,6 +26,7 @@
       var user = JSON.parse($.cookie('user'));
       console.log('User', user);
       $('#nickname').text(user.nickname);
+      $('#roomId').text(user.roomId);
       // var path = window.location.pathname.trim().split('/');
       // var roomId = path[path.length - 1];
       // var socket = io(window.location.protocol + '//' + window.location.hostname + '/AAAA');
@@ -58,6 +61,11 @@
       // });
     });
     </script>
-    <label id="nickname" class="nickname"></label>
+    <div "content">
+      <label id="nickname" class="nickname"></label>
+    </div>
+    <div class="footer">
+      <label id="roomId"></label>
+    </div>
   </body>
 </html>

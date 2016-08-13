@@ -30,7 +30,10 @@
           }
           var location = window.location;
           var path = '/room/' + code.val();
-          var user = { "nickname": nickname.val() };
+          var user = {
+            "nickname": nickname.val(),
+            "roomId": code.val(),
+          };
           $.cookie('user', JSON.stringify(user), { expires: 1, path: path });
           var redirectLocation = location.protocol+'//' + location.hostname +
               (location.port ? ':'+location.port: '') + path;
