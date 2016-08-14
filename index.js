@@ -170,7 +170,7 @@ ioRoom.on('connection', function(socket) {
   };
   if (socket.handshake.query.isHost == 'true') {
       clients.host = client;
-      console.log('Connection Host Joined');
+      ioRoom.emit('log', 'Connection Host Joined');
       setupHost(ioRoom, socket);
   } else if (clients.host != null ) {
     var host = ioRoom.sockets[clients.host.id];
