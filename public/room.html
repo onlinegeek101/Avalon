@@ -154,6 +154,8 @@
         onStart(info.gameInfo);
         return;
       } else {
+        console.log('Info', info);
+        console.log('Info.Player', playerInfo);
         user.player = playerInfo;
         console.log('Player Info:', user);
         writeUser();
