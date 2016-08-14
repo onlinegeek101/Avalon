@@ -97,9 +97,9 @@
     }
 
     function onJoinedSuccess(socket, playerInfo) {
-      console.log(playerInfo);
       user.player = playerInfo;
-      writeUser(user);
+      console.log('Player Info:', user);
+      writeUser();
       waitingToStart(playerInfo);
       $('#start').click(function (e) {
         socket.emit('start', {
@@ -113,7 +113,7 @@
       });
     }
 
-    function writeUser(user) {
+    function writeUser() {
       var path = '/room/' + user.roomId;
       $.cookie('user', JSON.stringify(user), { expires: 1, path: path });
     }
@@ -123,13 +123,15 @@
     }
 
     $(document).ready(function () {
+      console.log('User Loaded: ', user);
       $('#nickname').text(user.nickname);
       $('#roomId').text(user.roomId);
       var location = window.location;
       var socketLocation = location.protocol + '//' +
         location.hostname + (location.port ? ':'+location.port: '') + '/' + user.roomId;
-      var playerInfoQuery = user.playerInfo == null ? '' :
-        '&player=' + encodeURIComponent(JSON.stringify(user.playerInfo));
+      var playerInfoQuery = user.player == null ? '' :
+        '&player=' + encodeURIComponent(JSON.stringify(user.player));
+      console.log('Player Info Query', playerInfoQuery);
       var socket = io(socketLocation, {
             query: "name=" + user.nickname + playerInfoQuery,
           });
