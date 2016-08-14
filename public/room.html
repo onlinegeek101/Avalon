@@ -128,8 +128,10 @@
       var location = window.location;
       var socketLocation = location.protocol + '//' +
         location.hostname + (location.port ? ':'+location.port: '') + '/' + user.roomId;
+      var playerInfoQuery = user.playerInfo == null ? '' :
+        '&player=' + encodeURIComponent(JSON.stringify(user.playerInfo));
       var socket = io(socketLocation, {
-            query: "name=" + user.nickname,
+            query: "name=" + user.nickname + playerInfoQuery,
           });
       socket.on('ready', onReady);
       socket.on('unready', unReady);

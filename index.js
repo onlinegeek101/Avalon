@@ -39,15 +39,21 @@ var players = {};
 var clients = {};
 var ioRoom = io.of('/AAAA');
 ioRoom.on('connection', function(socket) {
-  var client = {
-    id: socket.id,
-    player: {
+  var player = socket.handshake.query.player;
+  if (player == null || player == '') {
+    player = {
       playerColor: randomColor({
         luminosity: 'dark',
       }),
       playerId: guid(),
       playerName: socket.handshake.query.name,
-    },
+    }
+  } else {
+    player = JSON.parse(player);
+  }
+  var client = {
+    id: socket.id,
+    player: player,
   };
   if (socket.handshake.query.isHost == 'true') {
       clients.host = client;
