@@ -198,7 +198,7 @@
       socket.on('unready', unReady);
       socket.on('countdown', onCountdown);
       socket.on('cancelStart', onCancelStart);
-      socket.on('onJoin', function(msg) {
+      socket.on('playerJoinedRoom', function(msg) {
         onJoinedSuccess(socket, msg)
       });
       socket.on('log', function(msg) {
