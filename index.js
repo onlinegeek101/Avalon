@@ -184,7 +184,7 @@ ioRoom.on('connection', function(socket) {
     }
     var info = gameInfo == null || gameInfo.byPlayerId == null ? null : gameInfo.byPlayerId[client.player.playerId];
     ioRoom.emit('log', 'Emitting Player' + client.player);
-    socket.emit('playerJoinedRoom', {
+    socket.emit('onJoin', {
       'player': client.player,
       'gameInfo': info,
     });
