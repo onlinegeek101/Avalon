@@ -75,14 +75,13 @@ function buildSpyInfo(spies) {
     var spy = spies[i];
     var knowledge = [];
     for (var j = 0; j < spies.length; j++) {
-      if (i == j) {
-        continue;
+      if (i != j) {
+        var otherSpy = spies[j];
+        knowledge.push({
+          'playerName': otherSpy.player.playerName,
+          'allegance': 'spy',
+        })
       }
-      var otherSpy = spies[j];
-      knowledge.push({
-        'playerName': otherSpy.player.playerName,
-        'allegance': 'spy',
-      })
     }
     spiesInfo.push({
       'data': {
@@ -112,6 +111,15 @@ function setupGame(players) {
   Object.keys(players).forEach(function(key) {
     playerList.push(players[key]);
   });
+  var questLeader = playerList[Math.floor(Math.random() * playerList.length)].player.playerId;
+  var rotation = [];
+  rotation.push(questLeader);
+  playerList.forEach(function(player) {
+    if (questLeader != player.player.playerId) {
+      rotation.push(player.player.playerId);
+    }
+  });
+  var playerCount = playerList.length;
   var spiesCount = getSpiesCount(playerList.length);
   var spies = buildSpyInfo(removeRandomN(playerList, spiesCount));
   var resistance = buildResistanceInfo(playerList);
@@ -128,6 +136,10 @@ function setupGame(players) {
     byPlayerId[member.client.player.playerId] = spy.data;
   }
   return {
+    'hostData': {
+      'questLeader': questLeader,
+      'rotation': rotation,
+    },
     'spies': spies,
     'resistance': resistance,
     'byPlayerId': byPlayerId,
@@ -216,6 +228,7 @@ ioRoom.on('connection', function(socket) {
             console.log('Emitting data to resistance member', info);
             ioRoom.sockets[info.client.id].emit('start', info.data);
           }
+          host.emit('start', gameInfo.hostData);
         }
       }, 1000);
       socket.on('cancelStart', function(msg){
