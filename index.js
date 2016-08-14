@@ -41,7 +41,9 @@ ioRoom.on('connection', function(socket){
   var client = {
     id: socket.id,
     player: {
-      playerColor: randomColor(),
+      playerColor: randomColor({
+        luminosity: 'dark',
+      }),
       playerId: guid(),
       playerName: socket.handshake.query.name,
     },
