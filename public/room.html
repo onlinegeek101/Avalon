@@ -60,6 +60,8 @@
     <script src="../js/jquery-cookie-1.4.1.js"></script>
     <script>
 
+    var user = getUser();
+
     function onCountdown(timer) {
       $('#start').hide();
       $('#stop').show();
@@ -96,17 +98,31 @@
 
     function onJoinedSuccess(socket, playerInfo) {
       console.log(playerInfo);
+      user.player = playerInfo;
+      writeUser(user);
       waitingToStart(playerInfo);
       $('#start').click(function (e) {
-        socket.emit('start');
+        socket.emit('start', {
+          "playerId": playerInfo.playerId,
+        });
       });
       $('#stop').click(function (e) {
-        socket.emit('cancelStart');
+        socket.emit('cancelStart', {
+          "playerId": playerInfo.playerId,
+        });
       });
     }
 
+    function writeUser(user) {
+      var path = '/room/' + code.val();
+      $.cookie('user', JSON.stringify(user), { expires: 1, path: path });
+    }
+
+    function getUser() {
+      return JSON.parse($.cookie('user'));
+    }
+
     $(document).ready(function () {
-      var user = JSON.parse($.cookie('user'));
       $('#nickname').text(user.nickname);
       $('#roomId').text(user.roomId);
       var location = window.location;

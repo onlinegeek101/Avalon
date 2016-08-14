@@ -35,10 +35,10 @@ function guid() {
     s4() + '-' + s4() + s4() + s4();
 }
 
+var players = {};
 var clients = {};
 var ioRoom = io.of('/AAAA');
 ioRoom.on('connection', function(socket) {
-  var players = {};
   var client = {
     id: socket.id,
     player: {
@@ -58,7 +58,7 @@ ioRoom.on('connection', function(socket) {
     if (host != null) {
       host.emit('playerJoinedRoom', client.player);
     }
-    players[client.id] = client;
+    players[client.player.playerId] = client;
     if (Object.keys(players).length > MIN_PLAYERS) {
       ioRoom.emit('ready', {});
     }
@@ -93,7 +93,7 @@ ioRoom.on('connection', function(socket) {
       if (clients.host != null && clients.host.id == socket.id) {
         clients.host = null;
       }
-      delete players[client.id];
+      delete players[client.player.playerId];
       if (Object.keys(players).length < MIN_PLAYERS) {
         ioRoom.emit('unready', {});
       }
