@@ -65,6 +65,7 @@ ioRoom.on('connection', function(socket) {
       host.emit('playerJoinedRoom', client.player);
     }
     players[client.player.playerId] = client;
+    ioRoom.emit('log', "Players Remaining: " + players.length);
     if (Object.keys(players).length > MIN_PLAYERS) {
       ioRoom.emit('ready', {});
     }
@@ -100,6 +101,7 @@ ioRoom.on('connection', function(socket) {
         clients.host = null;
       }
       delete players[client.player.playerId];
+      ioRoom.emit('log', "Players Remaining: " + players.length);
       if (Object.keys(players).length < MIN_PLAYERS) {
         ioRoom.emit('unready', {});
       }

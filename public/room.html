@@ -142,6 +142,9 @@
       socket.on('playerJoinedRoom', function(msg) {
         onJoinedSuccess(socket, msg)
       });
+      socket.on('log', function(msg) {
+        console.log('From Server: ' + msg);
+      })
     });
     </script>
     <div class="content">
