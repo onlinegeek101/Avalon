@@ -7,7 +7,7 @@ var randomColor = require('randomcolor');
 app.set('port', (process.env.PORT || 3000));
 
 app.get('/', function(req, res){
-  res.sendFile(__dirname + '/join.html');
+  res.sendFile(__dirname + '/public/join.html');
 });
 
 app.get('/host', function(req, res){
