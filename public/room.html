@@ -98,6 +98,8 @@
         teamLabel.text(roleInfo.allegance);
       }
 
+      $('#gameInfo').append(teamLabel);
+
       var teamList = $('<ul>', {
         class: 'teammates'
       });
@@ -113,14 +115,14 @@
           teamMate.append(teamMateLabel);
           teamList.append(teamMate);
         }
+        var teamMatesListTitle = $('<label>', {
+          class: 'teammates'
+        });
+        teamMatesListTitle.text('Teammates:');
+        $('#gameInfo').append(teamMatesListTitle);
+        $('#gameInfo').append(teamList);
       }
-      $('#gameInfo').append(teamLabel);
-      var teamMatesListTitle = $('<label>', {
-        class: 'teammates'
-      });
-      teamMatesListTitle.text('Teammates:');
-      $('#gameInfo').append(teamMatesListTitle);
-      $('#gameInfo').append(teamList);
+
       $('#nickname').hide();
     }
 
