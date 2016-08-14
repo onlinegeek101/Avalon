@@ -2,7 +2,7 @@ var MIN_PLAYERS = 2;
 var MAX_PLAYERS = 10;
 
 var SPIES_CONFIG = {
-  2: 1,
+  2: 2,
   5: 2,
   6: 2,
   7: 3,
@@ -29,11 +29,12 @@ function buildSpyInfo(spies) {
       if (i != j) {
         var otherSpy = spies[j];
         knowledge.push({
-          'playerName': otherSpy.playerName,
+          'playerName': otherSpy.name,
           'allegance': 'spy',
         })
       }
     }
+    console.log('Knowledge', knowledge);
     spiesInfo.push({
       'data': {
         'allegance': 'spy',

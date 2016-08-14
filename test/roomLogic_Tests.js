@@ -15,22 +15,24 @@ var socket = new MockSocket('Room');
 //   socket.trigger('on', 'cancelCountdown', {});
 // }, 1000);
 // room.close();
-
-var game = new Game()
-room = new Room(socket, game);
-socket.trigger('on', 'connection', new MockSocket('Host', {
+var host = new MockSocket('Host', {
   "isHost": 'true'
-}));
+});
+var game = new Game()
+room = new Room(socket, host, game);
 socket.trigger('on', 'connection', new MockSocket('NewUser1', {
   "name": "TJ",
 }));
 socket.trigger('on', 'connection', new MockSocket('NewUser3', {
   "name": "Kerianna",
 }));
-socket.trigger('on', 'disconnect', new MockSocket('NewUser3', {
-  "name": "Kerianna",
+socket.trigger('on', 'connection', new MockSocket('Mom', {
+  "name": "Mom",
 }));
-socket.trigger('on', 'connection', new MockSocket('NewUser3', {
-  "name": "Kerianna",
+socket.trigger('on', 'connection', new MockSocket('Dad', {
+  "name": "Dad",
+}));
+socket.trigger('on', 'connection', new MockSocket('Mama', {
+  "name": "Mama",
 }));
 socket.trigger('on', 'startGame', {});

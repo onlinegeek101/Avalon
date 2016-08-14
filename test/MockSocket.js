@@ -9,6 +9,9 @@ module.exports = function (id, values) {
     "emit": function(msg, data) {
       console.log('EMIT[' + id + ']: ' + msg, data);
     },
+    "use": function() {
+
+    },
     "on": function(cmd, handler) {
       var onHandlers = handlers['on'] == null ? {} : handlers['on'];
       var list = onHandlers[cmd] == null ? [] : onHandlers[cmd];

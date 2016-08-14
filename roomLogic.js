@@ -5,7 +5,7 @@ var MIN_PLAYERS = 2;
 var MAX_PLAYERS = 10;
 
 module.exports = function (io, host, gameLogic) {
-  if (io == null || gameLogic == null) {
+  if (io == null || host == null || gameLogic == null) {
     throw 'Required Room Argument Missing';
   }
   var hasGameStarted = false;

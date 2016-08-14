@@ -25,7 +25,7 @@
         padding: 60px;
       }
       li.teammate {
-
+        height: 20px;
       }
       label.teammate {
         font-size: 9vw;
@@ -100,10 +100,11 @@
 
       $('#gameInfo').append(teamLabel);
 
-      var teamList = $('<ul>', {
-        class: 'teammates'
-      });
+      console.log('Creating Role Team List', roleInfo);
       if (roleInfo.knowledge != null && roleInfo.knowledge.length > 0) {
+        var teamList = $('<ul>', {
+          class: 'teammates'
+        });
         for (var i = 0; i < roleInfo.knowledge.length; i++) {
           var teamMate = $('<li>', {
             class: 'teammate',
@@ -111,6 +112,7 @@
           var teamMateLabel = $('<label>', {
             class: 'teammate',
           });
+          console.log('Knowledge', roleInfo.knowledge);
           teamMateLabel.text(roleInfo.knowledge[i].playerName);
           teamMate.append(teamMateLabel);
           teamList.append(teamMate);
