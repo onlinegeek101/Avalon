@@ -29,6 +29,17 @@
         bottom: 0;
         right: 0;
       }
+      button {
+        color: black;
+        font-size: 10vw;
+        display: inline-block;
+        background-color: lightgrey;
+        border: 2px darkgrey;
+        padding: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        border-radius: 4vw;
+      }
       label.footer {
         font-size: 6vw;
       }
@@ -55,6 +66,9 @@
       console.log(playerInfo);
       $('#message').text('Waiting for Game to Start');
       $('body').css('background-color', playerInfo.playerColor);
+      $('#start').click(function (e) {
+        socket.emit('start');
+      });
     }
 
     $(document).ready(function () {
@@ -74,6 +88,7 @@
     <div class="content">
       <label id="nickname" class="nickname"></label>
       <label id="message" class="message">Joining Game</label>
+      <button id="start" name="start">Start Game</button>
     </div>
     <div class="footer">
       <label class="footer">Room Code: </label>

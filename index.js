@@ -36,8 +36,7 @@ function guid() {
 
 var clients = {};
 var ioRoom = io.of('/AAAA');
-ioRoom.on('connection', function(socket){
-  console.log('Query: ', socket.handshake.query);
+ioRoom.on('connection', function(socket) {
   var client = {
     id: socket.id,
     player: {
