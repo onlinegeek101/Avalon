@@ -86,6 +86,14 @@
       $('body').css('background-color', playerInfo.playerColor);
     }
 
+    function onReady(info) {
+      $('#start').show();
+    }
+
+    function unReady(info) {
+      $('#start').hide();
+    }
+
     function onJoinedSuccess(socket, playerInfo) {
       console.log(playerInfo);
       waitingToStart(playerInfo);
@@ -107,6 +115,8 @@
       var socket = io(socketLocation, {
             query: "name=" + user.nickname,
           });
+      socket.on('ready', onReady);
+      socket.on('unready', unReady);
       socket.on('countdown', onCountdown);
       socket.on('cancelStart', onCancelStart);
       socket.on('playerJoinedRoom', function(msg) {
@@ -117,7 +127,7 @@
     <div class="content">
       <label id="nickname" class="nickname"></label>
       <label id="message" class="message">Joining Game</label>
-      <button id="start" name="start">Start Game</button>
+      <button id="start" name="start" style="display: none;">Start Game</button>
       <button id="stop" name="stop" style="display: none;">Stop</button>
     </div>
     <div class="footer">

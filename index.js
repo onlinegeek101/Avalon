@@ -3,6 +3,7 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var randomColor = require('randomcolor');
+var MIN_PLAYERS = 2;
 
 app.set('port', (process.env.PORT || 3000));
 
@@ -37,6 +38,7 @@ function guid() {
 var clients = {};
 var ioRoom = io.of('/AAAA');
 ioRoom.on('connection', function(socket) {
+  var players = {};
   var client = {
     id: socket.id,
     player: {
@@ -55,6 +57,10 @@ ioRoom.on('connection', function(socket) {
     var host = ioRoom.sockets[clients.host.id];
     if (host != null) {
       host.emit('playerJoinedRoom', client.player);
+    }
+    players[client.id] = client;
+    if (Object.keys(players).length > MIN_PLAYERS) {
+      ioRoom.emit('ready', {});
     }
     socket.emit('playerJoinedRoom', client.player);
     socket.on('disconnect', function(msg){
@@ -82,6 +88,15 @@ ioRoom.on('connection', function(socket) {
         clearInterval(timer);
         ioRoom.emit('cancelStart', client.player);
       });
+    });
+    socket.on('disconnect', function(socket) {
+      if (clients.host != null && clients.host.id == socket.id) {
+        clients.host = null;
+      }
+      delete players[client.id];
+      if (Object.keys(players).length < MIN_PLAYERS) {
+        ioRoom.emit('unready', {});
+      }
     });
   }
 });
