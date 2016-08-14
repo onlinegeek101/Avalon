@@ -75,13 +75,14 @@ function buildSpyInfo(spies) {
     var spy = spies[i];
     var knowledge = [];
     for (var j = 0; j < spies.length; j++) {
-      if (i != j) {
-        var otherSpy = spies[j];
-        knowledge.push({
-          'playerName': otherSpy.player.playerName,
-          'allegance': 'spy',
-        })
+      if (i == j) {
+        continue;
       }
+      var otherSpy = spies[j];
+      knowledge.push({
+        'playerName': otherSpy.player.playerName,
+        'allegance': 'spy',
+      })
     }
     spiesInfo.push({
       'data': {
@@ -115,9 +116,10 @@ function setupGame(players) {
   var rotation = [];
   rotation.push(questLeader);
   playerList.forEach(function(player) {
-    if (questLeader != player.player.playerId) {
-      rotation.push(player.player.playerId);
+    if (questLeader == player.player.playerId) {
+      continue;
     }
+    rotation.push(player.player.playerId);
   });
   var playerCount = playerList.length;
   var spiesCount = getSpiesCount(playerList.length);
@@ -139,7 +141,7 @@ function setupGame(players) {
     'hostData': {
       'questLeader': questLeader,
       'rotation': rotation,
-    },
+    }
     'spies': spies,
     'resistance': resistance,
     'byPlayerId': byPlayerId,
