@@ -24,6 +24,19 @@
         display: inline-block;
         padding: 60px;
       }
+      li.teammate {
+
+      }
+      label.teammate {
+        font-size: 9vw;
+      }
+      label.teammates {
+        font-size: 12vw;
+        padding-top: 10px;
+      }
+      label.team {
+        font-size: 24vw;
+      }
       div.footer {
         position: inherit;
         text-align: right;
@@ -65,11 +78,49 @@
     function onCountdown(timer) {
       $('#start').hide();
       $('#stop').show();
-      if (timer.time == 0) {
-        $('#message').text('GO!!!');
-        return;
-      }
       $('#message').text('Starting in: ' + timer.time);
+    }
+
+    function onStart(roleInfo) {
+      $('#stop').hide();
+      $('#message').hide();
+      $('#gameInfo').show();
+
+      var teamLabel = $('<label>', {
+        class: "team"
+      });
+      if (roleInfo.allegance == 'spy') {
+        teamLabel.text('Spy');
+      } else if (roleInfo.allegance == 'resistance') {
+        teamLabel.text('Resistance');
+      } else {
+        teamLabel.text(roleInfo.allegance);
+      }
+
+      var teamList = $('<ul>', {
+        class: 'teammates'
+      });
+      if (roleInfo.knowledge != null && roleInfo.knowledge.length > 0) {
+        for (var i = 0; i < roleInfo.knowledge.length; i++) {
+          var teamMate = $('<li>', {
+            class: 'teammate',
+          })
+          var teamMateLabel = $('<label>', {
+            class: 'teammate',
+          });
+          teamMateLabel.text(roleInfo.knowledge[i].playerName);
+          teamMate.append(teamMateLabel);
+          teamList.append(teamMate);
+        }
+      }
+      $('#gameInfo').append(teamLabel);
+      var teamMatesListTitle = $('<label>', {
+        class: 'teammates'
+      });
+      teamMatesListTitle.text('Teammates:');
+      $('#gameInfo').append(teamMatesListTitle);
+      $('#gameInfo').append(teamList);
+      $('#nickname').hide();
     }
 
     function onCancelStart(playerInfo) {
@@ -96,21 +147,28 @@
       $('#start').hide();
     }
 
-    function onJoinedSuccess(socket, playerInfo) {
-      user.player = playerInfo;
-      console.log('Player Info:', user);
-      writeUser();
-      waitingToStart(playerInfo);
-      $('#start').click(function (e) {
-        socket.emit('start', {
-          "playerId": playerInfo.playerId,
+    function onJoinedSuccess(socket, info) {
+      var playerInfo = info.player;
+      if (info.gameInfo != null) {
+        $('body').css('background-color', playerInfo.playerColor);
+        onStart(info.gameInfo);
+        return;
+      } else {
+        user.player = playerInfo;
+        console.log('Player Info:', user);
+        writeUser();
+        waitingToStart(playerInfo);
+        $('#start').click(function (e) {
+          socket.emit('start', {
+            "playerId": playerInfo.playerId,
+          });
         });
-      });
-      $('#stop').click(function (e) {
-        socket.emit('cancelStart', {
-          "playerId": playerInfo.playerId,
+        $('#stop').click(function (e) {
+          socket.emit('cancelStart', {
+            "playerId": playerInfo.playerId,
+          });
         });
-      });
+      }
     }
 
     function writeUser() {
@@ -135,6 +193,7 @@
       var socket = io(socketLocation, {
             query: "name=" + user.nickname + playerInfoQuery,
           });
+      socket.on('start', onStart);
       socket.on('ready', onReady);
       socket.on('unready', unReady);
       socket.on('countdown', onCountdown);
@@ -150,6 +209,7 @@
     <div class="content">
       <label id="nickname" class="nickname"></label>
       <label id="message" class="message">Joining Game</label>
+      <div id="gameInfo" class="gameInfo" style="display: none;"></div>
       <button id="start" name="start" style="display: none;">Start Game</button>
       <button id="stop" name="stop" style="display: none;">Stop</button>
     </div>
