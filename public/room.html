@@ -61,7 +61,8 @@
     <script>
 
     function onCountdown(timer) {
-      console.log('Countdown: ', timer);
+      $('#start').hide();
+      $('#stop').show();
       if (timer.time == 0) {
         $('#message').text('GO!!!');
         return;
@@ -90,8 +91,6 @@
       waitingToStart(playerInfo);
       $('#start').click(function (e) {
         socket.emit('start');
-        $('#start').hide();
-        $('#stop').show();
       });
       $('#stop').click(function (e) {
         socket.emit('cancelStart');
