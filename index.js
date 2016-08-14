@@ -64,6 +64,25 @@ ioRoom.on('connection', function(socket) {
         host.emit('playerLeftRoom', client.player);
       }
     });
+    socket.on('start', function(msg){
+      console.log('Started Timer');
+      var time = 5;
+      var timer = setInterval(function() {
+        socket.emit('countdown', {
+          "time": time--
+        })
+        if (time < 0) {
+          clearInterval(timer);
+          socket.emit('start', {
+
+          });
+        }
+      }, 1000);
+      socket.on('cancelStart', function(msg){
+        clearInterval(timer);
+        socket.emit('cancelStart', client.player);
+      });
+    });
   }
 });
 

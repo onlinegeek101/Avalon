@@ -12,6 +12,8 @@
       }
       label {
         color: white;
+        display: inline-block;
+        width: 80%;
       }
       .nickname {
         font-size: 25vw;
@@ -57,17 +59,42 @@
     <script src="../js/jquery-1.11.1.js"></script>
     <script src="../js/jquery-cookie-1.4.1.js"></script>
     <script>
+
+    function onCountdown(timer) {
+      console.log('Countdown: ', timer);
+      if (timer.time == 0) {
+        $('#message').text('GO!!!');
+        return;
+      }
+      $('#message').text('Starting in: ' + timer.time);
+    }
+
+    function onCancelStart(playerInfo) {
+      $('#start').show();
+      $('#stop').hide();
+      waitingToStart(playerInfo);
+    }
+
     function gameStarted(data) {
       console.log(data);
       $('#message').text('Started');
     }
 
-    function onJoinedSuccess(playerInfo) {
-      console.log(playerInfo);
+    function waitingToStart(playerInfo) {
       $('#message').text('Waiting for Game to Start');
       $('body').css('background-color', playerInfo.playerColor);
+    }
+
+    function onJoinedSuccess(socket, playerInfo) {
+      console.log(playerInfo);
+      waitingToStart(playerInfo);
       $('#start').click(function (e) {
         socket.emit('start');
+        $('#start').hide();
+        $('#stop').show();
+      });
+      $('#stop').click(function (e) {
+        socket.emit('cancelStart');
       });
     }
 
@@ -81,14 +108,18 @@
       var socket = io(socketLocation, {
             query: "name=" + user.nickname,
           });
-      socket.on('startGame', gameStarted);
-      socket.on('playerJoinedRoom', onJoinedSuccess);
+      socket.on('countdown', onCountdown);
+      socket.on('cancelStart', onCancelStart);
+      socket.on('playerJoinedRoom', function(msg) {
+        onJoinedSuccess(socket, msg)
+      });
     });
     </script>
     <div class="content">
       <label id="nickname" class="nickname"></label>
       <label id="message" class="message">Joining Game</label>
       <button id="start" name="start">Start Game</button>
+      <button id="stop" name="stop" style="display: none;">Stop</button>
     </div>
     <div class="footer">
       <label class="footer">Room Code: </label>
