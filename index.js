@@ -51,7 +51,7 @@ function guid() {
 }
 
 var SPIES_CONFIG = {
-  2:2,
+  2: 1,
   5: 2,
   6: 2,
   7: 3,
