@@ -50,6 +50,7 @@
     function onJoinedSuccess(playerInfo) {
       console.log(playerInfo);
       $('#message').text('Waiting for Game to Start');
+      $('body').css('background-color', playerInfo.playerColor);
     }
 
     $(document).ready(function () {
