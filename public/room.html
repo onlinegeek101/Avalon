@@ -57,9 +57,10 @@
       $('#nickname').text(user.nickname);
       $('#roomId').text(user.roomId);
       var location = window.location;
-      var socket = io(location.protocol + '//' + location.hostname +
-          (location.port ? ':'+location.port: '') + '/' + user.roomId, {
-            "name": user.nickname,
+      var socketLocation = location.protocol + '//' +
+        location.hostname + (location.port ? ':'+location.port: '') + '/' + user.roomId;
+      var socket = io(socketLocation, {
+            query: "name=" + user.nickname,
           });
       socket.on('startGame', gameStarted);
       socket.on('playerJoinedRoom', onJoinedSuccess);

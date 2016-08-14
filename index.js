@@ -37,6 +37,7 @@ function guid() {
 var clients = {};
 var ioRoom = io.of('/AAAA');
 ioRoom.on('connection', function(socket){
+  console.log('Query: ', socket.handshake.query);
   var client = {
     id: socket.id,
     player: {
@@ -49,7 +50,7 @@ ioRoom.on('connection', function(socket){
       clients.host = client;
       console.log('Connection Host Joined');
       setupHost(ioRoom, socket);
-  } else if (clients.host != null) {
+  } else if (clients.host != null ) {
     var host = ioRoom.sockets[clients.host.id];
     if (host != null) {
       host.emit('playerJoinedRoom', client.player);
