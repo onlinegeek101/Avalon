@@ -24,6 +24,7 @@ module.exports = function (io, host, gameLogic) {
     if (host == null) {
       throw 'Waiting for host to join';
     }
+    host.emit(command, data);
   }
 
   function joinPlayer(room, socket, player) {
