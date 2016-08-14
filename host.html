@@ -11,6 +11,7 @@
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages li { padding: 5px 10px; }
       #messages li:nth-child(odd) { background: #eee; }
+      .roomButton { font: 2vw Helvetica, Arial; border-bottom-right-radius: 3px; }
     </style>
   </head>
   <body>
@@ -21,16 +22,20 @@
     $(document).ready(function () {
       var path = window.location.pathname.trim().split('/');
       var roomId = path[path.length - 1];
-      var socket = io(window.location.protocol + '//' + window.location.hostname + '/AAAA', { "query": "isHost=true"});
-
-      socket.on('playerJoinedRoom', function(msg) {
-        console.log('Player Joined');
-        $('#messages').append($('<li>').text("Adding: " + msg.playerId + " " + msg.playerName + " " + msg.playerColor));
-      });
-
-      socket.on('playerLeftRoom', function(msg) {
-        console.log('Player Removed');
-        $('#messages').append($('<li>').text("Removing " + msg.playerId));
+      var socket = io({ "query": "isHost=true"});
+      socket.on('assignRoom', function(msg) {
+        console.log('Assign Room:', msg);
+        $('#messages').append($('<li>').text("Joined Room: " + msg.roomCode));
+        // var room = socket.join(msg.roomCode, { "query": "isHost=true" });
+        socket.on('playerJoinedRoom', function(msg) {
+          console.log('Player Joined');
+          var element = $('<li>').text("Adding: " + msg.playerId + " " + msg.playerName + " " + msg.playerColor);
+          $('#messages').append(element);
+        });
+        socket.on('playerLeftRoom', function(msg) {
+          console.log('Player Removed');
+          $('#messages').append($('<li>').text("Removing " + msg.playerId));
+        });
       });
 
       $('#playerForm').submit(function() {

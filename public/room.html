@@ -151,7 +151,8 @@
     }
 
     function onJoinedSuccess(socket, info) {
-      var playerInfo = info.player;
+      console.log('On JOined', info);
+      var playerInfo = info.me;
       if (info.gameInfo != null) {
         $('body').css('background-color', playerInfo.playerColor);
         onStart(info.gameInfo);
@@ -164,7 +165,8 @@
         writeUser();
         waitingToStart(playerInfo);
         $('#start').click(function (e) {
-          socket.emit('start', {
+          console.log('starting the game');
+          socket.emit('startGame', {
             "playerId": playerInfo.playerId,
           });
         });
@@ -203,7 +205,7 @@
       socket.on('unready', unReady);
       socket.on('countdown', onCountdown);
       socket.on('cancelStart', onCancelStart);
-      socket.on('playerJoinedRoom', function(msg) {
+      socket.on('onJoined', function(msg) {
         onJoinedSuccess(socket, msg)
       });
       socket.on('log', function(msg) {
